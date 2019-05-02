@@ -16,7 +16,6 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { OwnerDashboardComponent } from './owner-dashboard/owner-dashboard.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +27,6 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
     HomeComponent,
     OwnerDashboardComponent,
     UserDashboardComponent
-
   ],
   imports: [
     BrowserModule,

@@ -9,7 +9,6 @@ import { AlertService } from '../_services/alert.service';
 import { EndUserLinkService } from '../end-user-link.service';
 import { StoreUidService } from '../store-uid.service';
 import { EndUserService } from '../end-user.service';
-import { MustMatch } from "../_helpers/must-match.validator";
 
 @Component({
     selector: 'app-register',
@@ -40,17 +39,13 @@ export class RegisterComponent implements OnInit {
         this.registerForm = this.formBuilder.group({
             firstName: ['', Validators.required],
             lastName: ['', Validators.required],
-            email: ['', [Validators.required, Validators.email]],
+            email: ['', Validators.required],
             password: ['', [Validators.required, Validators.minLength(6)]],
-            confirmPassword: ['', Validators.required],
+            confirmPassword: [''],
             phone: ['', Validators.required],
             gender: ['', Validators.required],
             type: ['', Validators.required]
-        },
-        {
-          validator: MustMatch('password', 'confirmPassword')
-        }
-  );
+        });
     }
 
     // convenience getter for easy access to form fields

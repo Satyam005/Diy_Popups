@@ -8,16 +8,12 @@ import { OwnerDashboardComponent } from './owner-dashboard/owner-dashboard.compo
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 import { HomeComponent } from './home/home.component';
 
-
 const routes: Routes = [
   {path: '', component: LandingpageComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
   {path: 'owner-dashboard', component: OwnerDashboardComponent, canActivate: [AuthGuard] },
-  {path: 'user-dashboard', component: UserDashboardComponent, canActivate: [AuthGuard], children: [
-    // {path: 'advts', component: AllAdvtComponent},
-    // {path: 'advt/:category', component: CategoryAddComponent}
-  ] }
+  {path: 'user-dashboard', component: UserDashboardComponent, canActivate: [AuthGuard] }
 
 ];
 export const routing = RouterModule.forRoot(routes);

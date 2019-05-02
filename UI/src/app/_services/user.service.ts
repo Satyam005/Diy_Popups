@@ -86,21 +86,8 @@ export class UserService {
 getPerdayClick(){
 
   return this.http
-  .get<number[]>(`${this.config.apiUrl}/my/dailyclicklimit`)
+  .get<number>(`${this.config.apiUrl}/my/dailyclicklimit`)
   .pipe(map(response=>response));
 }
 
-getVidClick(vid:number){
-
-  return this.http.get<number>
-  (`${this.config.apiUrl}/my/${vid}/clicked`).pipe(
-    map(response=>response)
-  );
-}
-
-viewBalance(){
-
-  return this.http.get<number>(`${this.config.apiUrl}/my/wallet`).
-  pipe(map(response=>response));
-}
 }

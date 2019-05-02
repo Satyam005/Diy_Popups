@@ -20,15 +20,7 @@ export class UserDashboardComponent implements OnInit {
   currentUser: User;
   reedemAmount;
   singleAd: Advertisement;
-  clicklimit: number;
-  categories: String[];
-  categoryList: String[];
-  adclicklimit: number;
-
-  clickList: number[];
-  walletBalance:number;
-
-  messageStatus: string;
+  clicklimit:number;
 
   constructor(
     private service: AdvertisementService,
@@ -37,7 +29,7 @@ export class UserDashboardComponent implements OnInit {
     private euid: StoreUidService,
     private authenticationService: AuthenticationService,
     private userService: UserService
-  ) { }
+  ) {}
   openNav() {
     document.getElementById("mySidenav").style.width = "250px";
   }
@@ -51,12 +43,6 @@ export class UserDashboardComponent implements OnInit {
     this.creditShow();
     this.getCurrentUserDetails();
     this.getAllAds();
-    this.getCategoryList();
-    this.findPerdayClicks();
-
-    this.getClickList();
-    this.WalletCheck();
-
   }
 
   getAllAds() {
@@ -103,45 +89,28 @@ export class UserDashboardComponent implements OnInit {
   }
 
   creditCount(vid: number) {
-
-    this.getAdById(vid);
-      console.log(vid);
     //this.credits=0;
+    this.getAdById(vid);
+    console.log(vid);
 
-    if (this.existsClick(vid)) {
-      this.messageStatus = `You have already earned credits for this ad`;
-    }
-    else if(this.clicklimit === 0){
-      this.messageStatus = `You have exceeded daily click limit`;
-    }
-    else {
-
-      // this.clickCount(vid);
-      // console.log("clicked");
-
-      this.userService.creditFlow(vid).subscribe(
-        data => {
-          this.credits = data;
-          this.creditShow();
-          this.findPerdayClicks();
-          this.getCategoryList();
-          this.getClickList();
-          this.messageStatus = `Congratulations... Added 2 credits`;
-          console.log(this.credits);
-
-        },
-        err => {
-          console.log(err);
-        }
-      );
-    }
+    this.clickCount(vid);
+    console.log("clicked");
+    this.userService.creditFlow(vid).subscribe(
+      data => (this.credits = data),
+      err => {
+        console.log(err);
+      }
+    );
+    this.creditShow();
+    this.findPerdayClicks();
+    console.log(this.credits);
   }
 
   creditShow() {
     this.userService.showCredits().subscribe(
       data => {
         this.credits = data;
-        console.log('User Credit:' + data);
+        console.log(data);
       },
       err => {
         console.log(err);
@@ -173,14 +142,9 @@ export class UserDashboardComponent implements OnInit {
   }
   reedemFunc() {
     console.log(this.reedemAmount);
-    if(this.reedemAmount<0){
-      alert("Please Enter A Valid Amount");
-      return;
-    }
     this.userService.updateUpcredits(this.reedemAmount).subscribe(
       data => {
         this.credits = data;
-        alert("Amount Reedemed Successfully...!!!");
       },
       error => {
         console.log(error);
@@ -188,106 +152,18 @@ export class UserDashboardComponent implements OnInit {
     );
   }
 
-  findPerdayClicks() {
+  findPerdayClicks(){
 
     this.userService.getPerdayClick().subscribe(
-      data => {
-        this.clicklimit = data[0];
-        console.log('Per day clicklimit: ' + data[0]);
+      data=>{
+        this.clicklimit=data;
+        console.log(data);
       },
 
-      error => {
+      error=>{
         console.log(error);
       }
-    )
+      )
   }
 
-  getCategoryList() {
-
-    this.service.getCategoryList().subscribe(
-      data => {
-        this.categoryList = data;
-      },
-      error => {
-        console.log(error);
-      }
-    );
-
   }
-
-  // filter(cat: string){
-  //   [].forEach.call(document.querySelectorAll(`.${cat}`), function (el) {
-  //     el.style.display = ;
-  //   });
-  // }
-
-  findVidClickLimit(vid: number) {
-
-    this.userService.getVidClick(vid).subscribe(
-      data => {
-        this.adclicklimit = data;
-        console.log('Add present in table:' + data);
-      },
-      error => { console.log(error); }
-    )
-
-  }
-
-  filter(cat: string) {
-
-    this.service.getAdsByCategory(cat).subscribe(
-
-      data => { this.advts = data; },
-      error => {
-
-        console.log(error);
-      }
-    );
-  }
-
-  // getMessage() {
-  //   let message = '';
-  //   if (this.clicklimit === 0 && this.adclicklimit === 0) {
-  //     message = `Sorry...You have already gained maximum credits for today..!!!`;
-  //   }
-  //   else if (this.clicklimit >= 1 && this.adclicklimit == 0) {
-  //     message = `Congratulations!!!! You have earned 2 credits..`;
-  //   }
-  //   else if (this.adclicklimit >= 1) {
-  //     message = `Sorry You Have Already Earned The Credits For This Advertisement`;
-  //   }
-  //   return message;
-  // }
-
-
-  getClickList() {
-    this.service.getClickList()
-      .subscribe(
-        data => {
-          this.clickList = data;
-          console.log(data);
-        }
-      );
-  }
-
-  existsClick(aid: number) {
-    if (this.clickList === undefined || this.clickList === null) {
-      console.log(aid+' false');
-      return false;
-    }
-    else {
-      let flag = this.clickList.indexOf(aid) !== -1 ? true : false;
-      console.log(aid);
-      console.log(flag);
-      return flag;
-    }
-  }
-
-WalletCheck(){
-
-  return this.userService.viewBalance().subscribe(data=>{console.log(data);this.walletBalance=data;},
-    err=>{console.log(err);}
-    );
-}
-
-}
